@@ -1,9 +1,8 @@
 require('dotenv').config();
-const Groq = require('groq-sdk');
+const fetch = require('node-fetch');
 const fs = require('fs');
-const groq = new Groq();
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Carpeta para almacenar imágenes temporalmente
+const upload = multer({ dest: 'uploads/' });
 
 const chatWithAI = async (req, res) => {
   try {
@@ -12,37 +11,43 @@ const chatWithAI = async (req, res) => {
 
     if (type === 'text') {
       const userMessage = req.body.message;
-      messages = [{ role: "user", content: userMessage }];
+      messages = [{ role: "user", parts: [{ text: userMessage }] }];
     } else if (type === 'image' && req.file) {
-      // Leer la imagen y convertirla a Base64
       const imagePath = req.file.path;
       const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' });
 
       messages = [
-        { role: "user", content: "Analyze this image", image: imageBase64 }
+        { role: "user", parts: [{ text: "Analyze this image", image: imageBase64 }] }
       ];
 
-      // Eliminar la imagen temporal después de la conversión
       fs.unlinkSync(imagePath);
     } else {
       return res.status(400).json({ error: 'Tipo de mensaje no soportado o archivo no proporcionado' });
     }
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages,
-      model: "llama-3.2-11b-vision-preview",
-      temperature: 1,
-      max_tokens: 1024,
-      top_p: 1,
-      stream: false
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.API_KEY}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contents: messages
+      })
     });
 
-    const aiResponse = chatCompletion.choices[0]?.message?.content || 'No se recibió respuesta de la IA';
-    res.json({ response: aiResponse });
+    const data = await response.json();
+    const aiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No se recibió respuesta válida de la IA';
+
+    // Suponiendo que tienes una ruta para un avatar de la IA
+    const aiAvatar = '/images/ai-avatar.png'; // Ruta al avatar de la IA
+
+    res.json({ response: aiResponse, avatar: aiAvatar });
+
   } catch (error) {
     console.error('Error en la API:', error);
     res.status(500).json({ error: 'Hubo un problema al procesar la solicitud' });
   }
 };
+
 
 module.exports = { chatWithAI, upload };

@@ -12,12 +12,13 @@ const app = express();
 
 // Configuración de Passport
 passport.use(new GoogleStrategy({
-  clientID: '61241558476-8usbeeop8eln7lqje7v4vd0s9f1tg0vb.apps.googleusercontent.com',
-  clientSecret: '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',
-  callbackURL: 'http://localhost:3000/auth/google/callback', 
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
 }, (token, tokenSecret, profile, done) => {
-  return done(null, profile);  
+  return done(null, profile);
 }));
+
 
 passport.serializeUser((user, done) => {
   done(null, user);

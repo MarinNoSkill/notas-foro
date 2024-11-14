@@ -4,19 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat con IA</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/stylechat.css">
 </head>
 <body>
   <h1>Será que pierdo?</h1>
   <div id="chatbox">
     <div class="background"></div>
     <div id="messages"></div>
-    <input type="text" id="userMessage" placeholder="Escribe tu mensaje...">
-    <input type="file" id="fileInput" accept="image/*">
-    <button onclick="sendImage()" id="sendImageButton ">Enviar imagen</button>
-    <button onclick="sendMessage()" id="sendTextButton">Enviar</button>
+    <div class="input-container">
+      <input type="text" id="userMessage" placeholder="Escribe tu mensaje...">
+      <button onclick="sendMessage()" id="sendTextButton">Enviar</button>
+      <button onclick="sendImage()" id="sendImageButton">📷</button>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    </div>
   </div>
-
   <script src="/js/script.js"></script>
 </body>
 </html>
+
