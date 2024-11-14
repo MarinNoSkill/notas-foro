@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .password-container {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div> <!-- Fondo completo de la página -->
+    <div class="container" id="container">
+        <!-- Formulario de inicio de sesión -->
+        <div class="form-container sign-in-container">
+            <form action="/auth/login" method="POST">
+                <h1>Iniciar sesión</h1>
+                
+                <!-- Botón de Google -->
+                <div class="social-container">
+                    <a href="/auth/google" class="social google"><img src="https://img.icons8.com/?size=512&id=17949&format=png" alt="Google"></a>
+                </div>
+				<!-- Botón de Google -->
+
+
+                
+                <p>O inicia con tu cuenta</p>
+                
+                <input type="email" name="Correo" placeholder="Correo electrónico" required />
+                
+                <div class="password-container">
+                    <input type="password" id="loginPassword" name="Contraseña" placeholder="Contraseña" required />
+                    <img src="/images/ojo-abierto.png" alt="Mostrar" class="eye-icon" id="toggleLoginPassword" />
+                </div>
+                
+                <button type="submit">Iniciar sesión</button>
+                <p>¿No tienes cuenta? <a href="#" id="signUpLink">Regístrate</a></p>
+            </form>
+        </div>
+
+        <!-- Formulario de registro -->
+        <div class="form-container sign-up-container">
+            <form action="/auth/register" method="POST">
+                <h1>Registrarse</h1>
+                
+                <!-- Campo para Documento de Identidad -->
+                <input type="text" name="DocId" placeholder="Documento de Identidad" required />
+                
+                <!-- Otros campos de registro -->
+                <input type="text" name="Nombre" placeholder="Nombre completo" required />
+                <input type="email" name="Correo" placeholder="Correo electrónico" required />
+                
+                <div class="password-container">
+                    <input type="password" id="registerPassword" name="Contraseña" placeholder="Contraseña" required />
+                    <img src="/images/ojo-abierto.png" alt="Mostrar" class="eye-icon" id="toggleRegisterPassword" />
+                </div>
+
+                <button type="submit">Registrarse</button>
+                <p>¿Ya tienes cuenta? <a href="#" id="signInLink">Inicia sesión</a></p>
+            </form>
+        </div>
+
+        <!-- Overlay para cambiar entre formularios -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Bienvenido de nuevo</h1>
+                    <p>Para seguir disfrutando de nuestra plataforma, por favor inicia sesión con tus datos</p>
+                    <button class="ghost" id="signIn">Iniciar sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Hola, amigo!</h1>
+                    <p>Para disfrutar de nuestros servicios, regístrate con tus datos</p>
+                    <button class="ghost" id="signUp">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript para controlar la visibilidad de la contraseña en el formulario de inicio de sesión
+        document.getElementById('toggleLoginPassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('loginPassword');
+            const icon = this;
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.src = "/images/ojo-cerrado.png";  // Cambiar a ícono de ojo cerrado
+            } else {
+                passwordField.type = "password";
+                icon.src = "/images/ojo-abierto.png";  // Cambiar a ícono de ojo abierto
+            }
+        });
+
+        // JavaScript para controlar la visibilidad de la contraseña en el formulario de registro
+        document.getElementById('toggleRegisterPassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('registerPassword');
+            const icon = this;
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.src = "/images/ojo-cerrado.png";  // Cambiar a ícono de ojo cerrado
+            } else {
+                passwordField.type = "password";
+                icon.src = "/images/ojo-abierto.png";  // Cambiar a ícono de ojo abierto
+            }
+        });
+    </script>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
